@@ -123,7 +123,25 @@ print("Saved correlation_matrix.png")
 # Step 7: Enhance Analysis with AI-Driven Insights
 # Send a prompt to the AI for story-based insights based on the created graphs
 try:
-    analysis_prompt = f"Using the generated visualizations (histogram, boxplot, scatter plot, and correlation heatmap), please provide a story-based analysis. Summarize the key findings, identify significant trends or outliers, and draw potential conclusions about the data." 
+    sampled_data_dict = data_subset.head(5).to_dict()
+    analysis_prompt = (
+        "You are an advanced data analyst. Here is a sample of the dataset: \n" +
+        f"{sampled_data_dict}\n" +
+        "Analyze the dataset under the following guidelines, providing evidence from the data:\n"
+        "1. Identify meaningful patterns or trends using historical analogies or futuristic projections.\n"
+        "2. Formulate hypotheses about the data (e.g., 'Do more experienced users tend to make fewer errors?').\n"
+        "3. Simulate 'what-if' scenarios (e.g., 'What happens if sales grow by 20% next quarter?').\n"
+        "4. Generate multidimensional analyses: if the data includes demographic, geographic, and behavioral dimensions, uncover hidden overlaps.\n"
+        "   You can use insights to create compelling 'personas' or narratives. Identify archetypes or personas (e.g., 'The Budget Shopper' or 'The Early Adopter') using clustering and/or other apt ways.\n"
+        "5. Evaluate potential biases in data and explain how they manifest (e.g., gender or age biases in recruitment datasets). \n"
+        "6. Reverse engineer hypotheses for the given data (e.g., Why did sales in region X drop?) and then generate plausible explanations using surrounding data. \n"
+        "7. Map the dataset to emotional stories (e.g., in sales data, highlighting trends of success/failure as ups and downs in a business journey).\n"
+        "Provide your analysis in a clear, structured manner in the form of a story by talking about:\n"
+        "- The data received, briefly\n"
+        "- The analysis you carried out\n"
+        "- The insights you discovered\n"
+        "- The implications of your findings (i.e., what to do with the insights)"
+    )
 
     story_response = httpx.post(
         "https://aiproxy.sanand.workers.dev/openai/v1/chat/completions",
@@ -162,7 +180,7 @@ with open("README.md", "w") as f:
     f.write("## AI Recommendation\n")
     f.write(f"### \"What is the Most Significant Column?\"\n")
     f.write(f"Upon sending the dataset to an AI-powered analysis tool, it recommended **`{selected_column}`** as the most significant column for analysis. The AI selected this column based on its strong relationship with other variables in the dataset, making it an ideal candidate for visualization in a histogram and scatter plot.\n\n")
-    
+  
     # Visualizations
     f.write("## Visualizations\n")
 
