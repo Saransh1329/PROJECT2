@@ -25,13 +25,8 @@ except Exception as e:
 # Adjust as needed based on the dataset size
 data_subset = data.iloc[:1000, :10]  # First 1000 rows and first 10 columns
 
-AIPROXY_TOKEN = os.environ.get("AIPROXY_TOKEN")
-if not AIPROXY_TOKEN:
-    print("Error: AIPROXY_TOKEN not set")
-    sys.exit(1)
-
-# Prepare the dataset for sending
-csv_data = data_subset.to_csv(index=False)
+# Integrate the token securely (avoid hardcoding tokens directly in code for production)
+AIPROXY_TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6IjIzZjMwMDI2MjRAZHMuc3R1ZHkuaWl0bS5hYy5pbiJ9.iE-x7LYqum80tS94Y0ICXVdCY6GgnTRY5-NoIf1X1s8"
 
 # Step 3: Request AI to recommend the best column for visualization
 try:
@@ -46,7 +41,7 @@ try:
                     "role": "user",
                     "content": f"Here is the CSV data from the file: {filename}. Please recommend the best column for visualization in a histogram and scatter plot.",
                 },
-                {"role": "user", "content": csv_data},  # Sending a smaller subset of the CSV data for analysis
+                {"role": "user", "content": data_subset.to_csv(index=False)},  # Sending a smaller subset of the CSV data for analysis
             ],
         },
         timeout=30,  # Set timeout duration
